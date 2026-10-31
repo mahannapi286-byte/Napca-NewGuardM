@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070812">
+  <title>Mahan Napca | Official</title>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      padding: 80px 16px 28px;
+      color: #f5f4ff;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #070812;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -50%;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 25% 30%, #603bff55, transparent 27%),
+        radial-gradient(circle at 75% 65%, #00e6c855, transparent 25%),
+        radial-gradient(circle at 55% 10%, #e13cff33, transparent 22%);
+      filter: blur(35px);
+      animation: backgroundMove 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes backgroundMove {
+      from { transform: translate(-3%, -2%) rotate(0deg) scale(1); }
+      to { transform: translate(3%, 2%) rotate(12deg) scale(1.12); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+
+    @keyframes pulse {
+      50% { opacity: .45; transform: scale(.75); }
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes pop {
+      from { opacity: 0; transform: translateY(-8px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes portalIn {
+      from { opacity: 0; transform: translateY(18px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes entryPop {
+      from { opacity: 0; transform: translateY(14px) scale(.94); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .container { width: min(760px, 100%); margin: auto; }
+    header { padding: 25px 10px 32px; text-align: center; }
+
+    .top-status {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      pointer-events: none;
+    }
+
+    .ping-widget, .active-widget {
+      pointer-events: auto;
+      padding: 10px 13px;
+      border: 1px solid #ffffff24;
+      border-radius: 14px;
+      background: #10111be8;
+      box-shadow: 0 8px 28px #0006;
+      backdrop-filter: blur(12px);
+    }
+
+    .ping-widget {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #d9d7ea;
+      font-size: 12px;
+    }
+
+    .ping-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #53f5df;
+      box-shadow: 0 0 12px #53f5df;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .ping-value { color: #70f4dc; font-weight: bold; }
+
+    .owner-shortcut {
+      position: fixed;
+      top: 57px;
+      left: 14px;
+      z-index: 6;
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      color: #d8ccff;
+      border: 1px solid #a99aff77;
+      border-radius: 13px;
+      background: linear-gradient(145deg, #251644ee, #10111bee);
+      box-shadow: 0 0 18px #855cff44;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .owner-shortcut:hover {
+      transform: translateY(-2px) scale(1.06);
+      box-shadow: 0 0 25px #a99aff88;
+    }
+
+    .active-widget {
+      display: none;
+      max-width: min(270px, 55vw);
+      border-color: #53f5df66;
+      background: linear-gradient(135deg, #06332fef, #10111bee);
+      box-shadow: 0 0 24px #00dfca26;
+    }
+
+    .active-widget.visible {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: pop .4s ease both;
+    }
+
+    .verify-mark {
+      flex: 0 0 auto;
+      width: 30px;height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #061614;
+      background: linear-gradient(135deg, #53f5df, #a7ffe9);
+      box-shadow: 0 0 18px #53f5df77;
+      font-weight: 900;
+    }
+
+    .active-title, .active-subtitle { display: block; }
+    .active-title { color: #9fffee; font-size: 12px; font-weight: bold; }
+    .active-subtitle { margin-top: 3px; color: #c6c3d7; font-size: 10px; }
+
+    .reaper {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 20px;
+      padding: 12px;
+      border: 1px solid #a99aff77;
+      border-radius: 28px;
+      background: #151326cc;
+      box-shadow: 0 0 32px #806cff66;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .reaper svg { width: 100%; height: 100%; }
+
+    .label {
+      display: inline-block;
+      padding: 8px 14px;
+      color: #9fffee;
+      border: 1px solid #53f5df66;
+      border-radius: 30px;
+      background: #53f5df12;
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    h1 {
+      margin: 20px 0 12px;
+      font-size: clamp(36px, 8vw, 62px);
+      line-height: 1.05;
+      background: linear-gradient(90deg, #fff, #a99aff, #53f5df);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle { color: #aaa9c0; line-height: 1.7; }
+
+    .card {
+      position: relative;
+      isolation: isolate;
+      margin: 18px 0;
+      padding: 24px;
+      overflow: hidden;
+      border: 1px solid #ffffff1c;
+      border-radius: 22px;
+      background: #11121ddd;
+      box-shadow: 0 18px 55px #0008;
+      backdrop-filter: blur(12px);
+    }
+
+    .card h2 { margin-bottom: 8px; }
+    .description { margin-bottom: 20px; color: #aaa9c0; font-size: 14px; }
+    .downloads { display: grid; gap: 12px; }
+
+    .download-button {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 18px;
+      color: white;
+      text-decoration: none;
+      border: 1px solid #a17aff88;
+      border-radius: 15px;
+      background: linear-gradient(100deg, #6545ec, #a13cff);
+      box-shadow: 0 6px 24px #854cff44;
+      transition: transform .2s, filter .2s, box-shadow .2s;
+      cursor: pointer;
+    }
+
+    .download-button:hover {
+      transform: translateY(-4px) scale(1.01);
+      filter: brightness(1.17);
+      box-shadow: 0 12px 30px #8a55ff66;
+    }
+
+    .button-title { font-weight: bold; }
+    .button-note { margin-top: 5px; color: #ffffffc9; font-size: 12px; }
+    .arrow { font-size: 23px; }
+
+    .wg-two {
+      border-color: #42ead755;
+      background:
+        radial-gradient(ellipse at 90% 0%, #00e6c822, transparent 45%),
+        linear-gradient(145deg, #081b20ee, #10151eee 58%, #11121ddd);
+      box-shadow: 0 18px 55px #00d9c411, inset 0 0 40px #00e6c40a;
+    }
+
+    .wg-two::before, .wg-three::before {
+      position: absolute;
+      z-index: -1;
+      right: 18px;
+      top: -48px;
+      font-size: 190px;
+      font-weight: 900;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .wg-two::before { content: "02"; color: #53f5df0b; }
+
+    .wg-two .download-button {
+      border-color: #53f5df77;
+      background: linear-gradient(105deg, #075d69, #087d83 52%, #315b9e);
+      box-shadow: 0 6px 24px #00dfca22;
+    }
+
+    .wg-two .download-button:nth-child(2) {
+      background: linear-gradient(105deg, #0b6573, #087e78 52%, #415ab3);
+    }
+
+    .wg-two .download-button:nth-child(3) {
+      background: linear-gradient(105deg, #145876, #126e86 52%, #5143a6);
+    }
+
+    .wg-two .download-button:hover { box-shadow: 0 10px 30px #00e6c444; }
+
+    .wg-three {
+      border-color: #ff73c655;
+      background:
+        radial-gradient(ellipse at 10% 0%, #ff45b822, transparent 45%),
+        radial-gradient(ellipse at 100% 100%, #8d43ff20, transparent 50%),
+        linear-gradient(145deg, #21101fee, #171122ee 58%, #11121ddd);
+      box-shadow: 0 18px 55px #fa3d9b12, inset 0 0 40px #ff45b80a;
+    }
+
+    .wg-three::before { content: "03"; color: #ff73c60b; }.wg-three .download-button {
+      border-color: #ff75c899;
+      background: linear-gradient(105deg, #7a205d, #a02d79 52%, #5732ad);
+      box-shadow: 0 6px 24px #ff45b822;
+    }
+
+    .wg-three .download-button:nth-child(2) {
+      background: linear-gradient(105deg, #85265e, #a03272 52%, #6938bd);
+    }
+
+    .wg-three .download-button:nth-child(3) {
+      background: linear-gradient(105deg, #73306e, #973379 52%, #7139bd);
+    }
+
+    .wg-three .download-button:hover { box-shadow: 0 10px 30px #ff45b844; }
+
+    .socials { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .social-link {
+      padding: 17px;
+      color: white;
+      text-decoration: none;
+      border: 1px solid #ffffff22;
+      border-radius: 15px;
+      background: #ffffff09;
+      transition: .2s;
+    }
+
+    .social-link:hover {
+      transform: translateY(-3px);
+      border-color: #53f5df;
+      box-shadow: 0 0 22px #53f5df33;
+    }
+
+    .social-link span {
+      display: block;
+      margin-bottom: 7px;
+      color: #aaa9c0;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .social-link strong { color: #70f4dc; overflow-wrap: anywhere; }
+
+    .notice {
+      margin-top: 15px;
+      color: #ffd98d;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    footer { padding: 22px 0; color: #77778d; text-align: center; font-size: 12px; }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: #000b;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-box {
+      width: min(520px, 100%);
+      padding: 22px;
+      border: 1px solid #a99aff66;
+      border-radius: 20px;
+      background: #151326;
+      box-shadow: 0 20px 70px #000b;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .modal-close, .copy-button {
+      padding: 10px 14px;
+      color: white;
+      border: 1px solid #ffffff30;
+      border-radius: 10px;
+      background: #ffffff12;
+      cursor: pointer;
+    }
+
+    .config-text {
+      width: 100%;
+      min-height: 220px;
+      padding: 14px;
+      color: #e8e6ff;
+      border: 1px solid #ffffff22;
+      border-radius: 12px;
+      background: #090a12;
+      font: 13px/1.6 monospace;
+      resize: vertical;
+    }
+
+    .copy-button {
+      margin-top: 12px;
+      border-color: #53f5df77;
+      background: #087c91;
+    }
+
+    /* Demo entry screen */
+    .auth-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      overflow-y: auto;
+      background:
+        radial-gradient(circle at 50% 35%, #603bff44, transparent 38%),
+        #070812f5;
+      backdrop-filter: blur(16px);
+    }
+
+    .auth-overlay.hidden { display: none; }
+
+    .auth-box {
+      width: min(440px, 100%);
+      padding: 27px;
+      text-align: center;
+      border: 1px solid #a99aff77;
+      border-radius: 24px;
+      background: linear-gradient(145deg, #19162df5, #0d1019f5);
+      box-shadow: 0 0 70px #784cff55, inset 0 0 30px #ffffff08;
+      animation: portalIn .6s ease both;
+    }
+
+    .auth-art {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 14px;
+      border: 1px solid #a99aff55;
+      border-radius: 50%;
+      background: radial-gradient(circle, #302052 0%, #100f1c 68%);
+      box-shadow: 0 0 34px #855cff44, inset 0 0 25px #53f5df12;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .auth-art::before, .auth-art::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1px dashed #53f5df55;
+      border-radius: 50%;
+      animation: spin 18s linear infinite;
+    }
+
+    .auth-art::after {
+      inset: 18px;
+      border-color: #d897ff55;
+      animation-direction: reverse;
+      animation-duration: 12s;
+    }
+
+    .reaper-face {
+      position: relative;z-index: 1;
+      width: 75px;
+      height: 87px;
+      clip-path: polygon(50% 0, 88% 17%, 83% 68%, 50% 100%, 17% 68%, 12% 17%);
+      background: linear-gradient(150deg, #ddd8ff, #77708f 48%, #252235);
+      filter: drop-shadow(0 0 12px #a99aff);
+    }
+
+    .reaper-face::before {
+      content: "◆   ◆";
+      position: absolute;
+      top: 31px;
+      left: 9px;
+      width: 57px;
+      color: #53f5df;
+      text-align: center;
+      font-size: 16px;
+      text-shadow: 0 0 10px #53f5df;
+    }
+
+    .reaper-face::after {
+      content: "";
+      position: absolute;
+      left: 34px;
+      top: 53px;
+      width: 8px;
+      height: 23px;
+      background: #0b0a12;
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    }
+
+    .scythe {
+      position: absolute;
+      z-index: 2;
+      right: 15px;
+      top: 18px;
+      color: #d5caff;
+      font-size: 37px;
+      text-shadow: 0 0 14px #a99aff;
+      transform: rotate(-25deg);
+    }
+
+    .rune {
+      position: absolute;
+      color: #d7ccff;
+      font-size: 13px;
+      opacity: .8;
+      text-shadow: 0 0 9px #a99aff;
+    }
+
+    .rune-one { top: 13px; left: 26px; }
+    .rune-two { right: 17px; bottom: 21px; }
+    .rune-three { left: 16px; bottom: 25px; }
+
+    .auth-kicker {
+      margin-bottom: 8px;
+      color: #70f4dc;
+      font-size: 10px;
+      letter-spacing: 3px;
+    }
+
+    .auth-box h2 { margin-bottom: 9px; color: #fff; font-size: 24px; }
+
+    .auth-caption {
+      margin-bottom: 19px;
+      color: #aaa9c0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .auth-input {
+      width: 100%;
+      margin: 7px 0;
+      padding: 14px 15px;
+      color: white;
+      border: 1px solid #ffffff22;
+      border-radius: 12px;
+      outline: none;
+      background: #080910;
+      font-size: 15px;
+    }
+
+    .auth-input:focus {
+      border-color: #53f5dfaa;
+      box-shadow: 0 0 18px #53f5df22;
+    }
+
+    .remember-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 10px 2px;
+      color: #c6c3d7;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .remember-row input { accent-color: #53f5df; }
+
+    .auth-submit {
+      width: 100%;
+      margin-top: 11px;
+      padding: 14px;
+      color: #071014;
+      border: 0;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #53f5df, #a99aff);
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .auth-error {
+      min-height: 20px;
+      margin-top: 10px;
+      color: #ff8aab;
+      font-size: 13px;
+    }
+
+    .auth-badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 7px 11px;
+      color: #9fffee;
+      border: 1px solid #53f5df55;
+      border-radius: 20px;
+      background: #53f5df10;
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    .admin-entry {
+      margin-top: 14px;
+      color: #858398;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .admin-entry button {
+      padding: 0;
+      color: #b8a8ff;
+      border: 0;
+      background: none;
+      font: inherit;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* Entry confirmation animation */
+    .entry-success {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: #070812ee;
+      backdrop-filter: blur(12px);
+    }
+
+    .entry-success.show { display: grid; }
+
+    .entry-success-card {
+      width: min(340px, 100%);
+      padding: 28px;
+      text-align: center;
+      border: 1px solid #53f5df77;
+      border-radius: 24px;
+      background: linear-gradient(145deg, #102622, #11121d);
+      box-shadow: 0 0 55px #53f5df44;
+      animation: entryPop .5s ease both;
+    }
+
+    .entry-reaper {
+      position: relative;
+      width: 90px;
+      height: 110px;
+      margin: 0 auto 18px;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    .entry-hood {
+      position: absolute;
+      inset: 0 5px 8px;
+      clip-path: polygon(50% 0, 95% 30%, 82% 100%, 18% 100%, 5% 30%);background: linear-gradient(145deg, #b7a8ff, #38304f 38%, #11111a 72%);
+      filter: drop-shadow(0 0 14px #a99aff88);
+    }
+
+    .entry-hood::before {
+      content: "✦   ✦";
+      position: absolute;
+      top: 42px;
+      left: 13px;
+      width: 54px;
+      color: #53f5df;
+      font-size: 18px;
+      text-shadow: 0 0 12px #53f5df;
+    }
+
+    .entry-scythe {
+      position: absolute;
+      top: -15px;
+      right: -7px;
+      color: #e0d8ff;
+      font-size: 55px;
+      transform: rotate(20deg);
+      text-shadow: 0 0 16px #a99aff;
+    }
+
+    .entry-success-card h2 { margin-bottom: 8px; color: #9fffee; }
+    .entry-success-card p { color: #c6c3d7; font-size: 14px; }
+
+    /* Demo admin panel */
+    .admin-page {
+      display: none;
+      width: min(900px, 100%);
+      margin: 25px auto;
+      padding: 22px;
+      border: 1px solid #a99aff66;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at top right, #623cff22, transparent 42%),
+        #11121df2;
+      box-shadow: 0 18px 60px #0008;
+    }
+
+    .admin-page.visible { display: block; }
+
+    .admin-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .admin-actions { display: flex; gap: 10px; }
+
+    .admin-button {
+      padding: 11px 15px;
+      color: white;
+      border: 1px solid #a99aff66;
+      border-radius: 11px;
+      background: #ffffff12;
+      cursor: pointer;
+    }
+
+    .admin-button.save {
+      color: #071014;
+      border: 0;
+      background: linear-gradient(90deg, #53f5df, #a99aff);
+      font-weight: bold;
+    }
+
+    .admin-grid { display: grid; gap: 15px; }
+
+    .admin-config {
+      padding: 17px;
+      border: 1px solid #ffffff20;
+      border-radius: 16px;
+      background: #090a12cc;
+    }
+
+    .admin-config h3 { margin-bottom: 12px; }
+
+    .admin-config label {
+      display: block;
+      margin: 10px 0 5px;
+      color: #aaa9c0;
+      font-size: 12px;
+    }
+
+    .admin-config input, .admin-config textarea {
+      width: 100%;
+      padding: 11px;
+      color: #fff;
+      border: 1px solid #ffffff25;
+      border-radius: 9px;
+      outline: none;
+      background: #070812;
+      font: 13px/1.5 monospace;
+    }
+
+    .admin-config textarea { min-height: 155px; resize: vertical; }
+
+    .admin-message {
+      min-height: 20px;
+      margin-top: 12px;
+      color: #70f4dc;
+      font-size: 13px;
+    }
+
+    @media (max-width: 520px) {
+      .socials { grid-template-columns: 1fr; }
+      .card { padding: 19px; }
+      .auth-box { padding: 22px 18px; }
+      .top-status { top: 10px; left: 10px; right: 10px; }
+      .owner-shortcut { top: 52px; left: 10px; }
+      .ping-widget, .active-widget { padding: 9px 10px; }
+      .active-title { font-size: 10px; }
+      .active-subtitle { font-size: 9px; }
+      .admin-toolbar { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before { animation: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="top-status">
+    <div class="ping-widget" aria-live="polite">
+      <span class="ping-dot"></span>
+      <span>Ping</span>
+      <span class="ping-value" id="pingValue">Checking...</span>
+    </div>
+
+    <div class="active-widget" id="activeWidget" aria-live="polite">
+      <span class="verify-mark">✓</span>
+      <span>
+        <span class="active-title">ONE CONFIG ACTIVE</span>
+        <span class="active-subtitle" id="activeConfigName">Verified configuration</span>
+      </span>
+    </div>
+  </div>
+
+  <button class="owner-shortcut" id="ownerShortcut" type="button"
+          title="Site owner access" aria-label="Open site owner access">✦</button>
+
+  <div class="auth-overlay" id="authOverlay">
+    <form class="auth-box" id="authForm">
+      <div class="auth-art" aria-hidden="true">
+        <span class="rune rune-one">ᛟ</span>
+        <span class="rune rune-two">✦</span>
+        <span class="rune rune-three">☽</span>
+        <div class="reaper-face"></div>
+        <span class="scythe">☾</span>
+      </div><p class="auth-kicker">⟡ SHADOW GATE • ACCESS PORTAL ⟡</p>
+      <h2>Enter the Realm</h2>
+      <p class="auth-caption">Enter your 11-digit phone number and 8-digit passcode to continue.</p>
+
+      <input class="auth-input" id="phoneInput" type="tel"
+             inputmode="numeric" pattern="[0-9]{11}" maxlength="11"
+             placeholder="11-digit phone number" autocomplete="off" required>
+
+      <input class="auth-input" id="passwordInput" type="password"
+             inputmode="numeric" pattern="[0-9]{8}" maxlength="8"
+             placeholder="8-digit passcode" autocomplete="off" required>
+
+      <label class="remember-row">
+        <input id="rememberChoice" type="checkbox">
+        <span>Save my password for next time?</span>
+      </label>
+
+      <button class="auth-submit" type="submit">VERIFY ACCESS &nbsp; ⟡</button>
+      <p class="auth-error" id="authError" aria-live="polite"></p>
+      <span class="auth-badge">✦ DEMO GATE • NO DATA IS SAVED ✦</span>
+
+      <p class="admin-entry">
+        Site owner?
+        <button type="button" id="openAdminLogin">Open demo admin panel</button>
+      </p>
+    </form>
+  </div>
+
+  <div class="entry-success" id="entrySuccess" aria-live="polite">
+    <div class="entry-success-card">
+      <div class="entry-reaper" aria-hidden="true">
+        <div class="entry-hood"></div>
+        <span class="entry-scythe">☾</span>
+      </div>
+      <h2>Access Granted</h2>
+      <p>Welcome. You can now enter the site.</p>
+    </div>
+  </div>
+
+  <div class="modal" id="adminLoginModal" role="dialog" aria-modal="true"
+       aria-labelledby="adminLoginTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="adminLoginTitle">Owner Access</h2>
+        <button class="modal-close" id="closeAdminLogin" type="button">Close</button>
+      </div>
+      <p class="description">Enter the owner code to open the admin panel.</p>
+      <input class="auth-input" id="adminCodeInput" type="password"
+             placeholder="Owner code" autocomplete="off">
+      <button class="copy-button" id="adminLoginButton" type="button">Enter Admin Panel</button>
+      <p class="auth-error" id="adminLoginError" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <main class="container" id="mainPage">
+    <header>
+      <div class="reaper" aria-label="Reaper symbol">
+        <svg viewBox="0 0 100 100" role="img">
+          <path d="M50 8C29 8 17 26 19 49l5 35h52l5-35C83 26 71 8 50 8Z"
+                fill="#171827" stroke="#a99aff" stroke-width="3"/>
+          <path d="M31 45c4-14 12-21 19-21s15 7 19 21L60 71H40Z" fill="#080910"/>
+          <path d="m37 47 10 4-10 4m26-8-10 4 10 4"
+                fill="none" stroke="#53f5df" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M73 25 48 80m18-49c12-17 22-21 27-17-1 12-9 20-25 23"
+                fill="none" stroke="#c6bbff" stroke-width="4"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="m40 71-10 17h40L60 71"
+                fill="#171827" stroke="#a99aff" stroke-width="3"
+                stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="label">OFFICIAL PAGE</span>
+      <h1>Welcome to<br>Mahan Napca</h1>
+      <p class="subtitle">Downloads, updates, and official community links.</p>
+    </header>
+
+    <section class="card">
+      <h2>WireGuard Downloads</h2>
+      <p class="description">Choose a server and enter its access code.</p>
+      <div class="downloads">
+        <a class="download-button" href="#" data-server="1">
+          <div><div class="button-title">WireGuard — Gold 1</div><div class="button-note">Enter access code to view</div></div><span class="arrow">↓</span>
+        </a>
+        <a class="download-button" href="#" data-server="2">
+          <div><div class="button-title">WireGuard — Platinium 1</div><div class="button-note">Enter access code to view</div></div><span class="arrow">↓</span>
+        </a>
+        <a class="download-button" href="#" data-server="3"><div><div class="button-title">WireGuard — Professional 1</div><div class="button-note">Enter access code to view</div></div><span class="arrow">↓</span>
+        </a>
+      </div>
+      <p class="notice">Select a server, enter its access code, then view and copy the configuration.</p>
+    </section>
+
+    <section class="card wg-two">
+      <h2>WireGuard 2</h2>
+      <p class="description">Choose a WireGuard 2 configuration. Each option requires its access code.</p>
+      <div class="downloads">
+        <a class="download-button" href="#" data-server="4">
+          <div><div class="button-title">WireGuard 2 — Gold 2</div><div class="button-note">Enter access code to view</div></div><span class="arrow">↓</span>
+        </a>
+        <a class="download-button" href="#" data-server="5">
+          <div><div class="button-title">WireGuard 2 — Platinium 2</div><div class="button-note">Enter access code to view</div></div><span class="arrow">↓</span>
+        </a>
+        <a class="download-button" href="#" data-server="6">
+          <div><div class="button-title">WireGuard 2 — Professional 2</div><div class="button-note">Enter access code to view</div></div><span class="arrow">↓</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="card wg-three">
+      <h2>WireGuard 3</h2>
+      <p class="description">Choose a WireGuard 3 configuration. Each option requires its access code.</p>
+      <div class="downloads">
+        <a class="download-button" href="#" data-server="7">
+          <div><div class="button-title">WireGuard 3 — Gold 3</div><div class="button-note">Enter access code to view</div></div><span class="arrow">↓</span>
+        </a>
+        <a class="download-button" href="#" data-server="8">
+          <div><div class="button-title">WireGuard 3 — Platinium 3</div><div class="button-note">Enter access code to view</div></div><span class="arrow">↓</span>
+        </a>
+        <a class="download-button" href="#" data-server="9">
+          <div><div class="button-title">WireGuard 3 — Professional 3</div><div class="button-note">Enter access code to view</div></div><span class="arrow">↓</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Connect With Us</h2>
+      <p class="description">Follow our Telegram account and channel.</p>
+      <div class="socials">
+        <a class="social-link" href="https://t.me/inapca" target="_blank" rel="noopener">
+          <span>Telegram Account</span><strong>@inapca</strong>
+        </a>
+        <a class="social-link" href="https://t.me/shopNapca" target="_blank" rel="noopener">
+          <span>Official Channel</span><strong>@shopNapca</strong>
+        </a>
+      </div>
+    </section>
+
+    <footer>© 2026 Mahan Napca. All rights reserved.</footer>
+  </main>
+
+  <section class="admin-page" id="adminPage">
+    <div class="admin-toolbar">
+      <div>
+        <h2>Site Admin Panel</h2>
+        <p class="description">Edit configuration text and access codes.</p>
+      </div>
+      <div class="admin-actions">
+        <button class="admin-button save" type="button" id="saveAdmin">Save changes</button>
+        <button class="admin-button" type="button" id="backFromAdmin">← Back to main page</button>
+      </div>
+    </div>
+    <div class="admin-grid" id="adminGrid"></div>
+    <p class="admin-message" id="adminMessage" aria-live="polite"></p>
+  </section>
+
+  <div class="modal" id="codeModal" role="dialog" aria-modal="true" aria-labelledby="codeTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="codeTitle">Server Access</h2>
+        <button class="modal-close" id="closeCodeModal" type="button">Close</button>
+      </div>
+      <p class="description">Enter the access code for this configuration.</p>
+      <input class="auth-input" id="serverCode" type="password" placeholder="Access code" autocomplete="off">
+      <button class="copy-button" id="submitCode" type="button">Verify code</button>
+      <p class="auth-error" id="codeError" aria-live="polite"></p>
+    </div>
+  </div><div class="modal" id="configModal" role="dialog" aria-modal="true" aria-labelledby="configTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="configTitle">WireGuard Configuration</h2>
+        <button class="modal-close" id="closeConfigModal" type="button">Close</button>
+      </div>
+      <textarea class="config-text" id="configText" readonly></textarea>
+      <button class="copy-button" id="copyConfig" type="button">Copy configuration</button>
+    </div>
+  </div>
+
+  <script>
+    const configs = {
+      1: `[Interface]
+Address = 192.168.66.0/24
+DNS = 10.202.10.10
+ListenPort = 51820
+MTU = 1420
+PrivateKey = cMHkiqpgtEwUiOqDuHB/ZgH3aOgTKBMlzoeCuXNzzHk=`,
+
+      2: `[Interface]
+Address = 10.0.0.0/16
+DNS = 10.202.10.10
+ListenPort = 51820
+MTU = 1420
+PrivateKey = cMHkiqpgtEwUiOqDuHB/ZgH3aOgTKBMlzoeCuXNzzHk=`,
+
+      3: `[Interface]
+Address = 10.0.0.0/24
+DNS = 185.55.225.25
+ListenPort = 51820
+MTU = 1480
+PrivateKey = gPg4zDHLDr7siZUlewEn34kCuNcH4AUz3AL/hMYedG8=`,
+
+      4: `[Interface]
+Address = 2.22.151.179/32
+DNS = 185.51.200.2
+ListenPort = 51820
+MTU = 1450
+PrivateKey = uFOeO9aMAPTXxLcHrezd/OTBSLG6jqXsLV+v5Ltfol4=`,
+
+      5: `[Interface]
+Address = 2.22.151.144/32
+DNS = 85.15.1.14
+ListenPort = 51820
+MTU = 1465
+PrivateKey = aDzNgcDO6jufj4Ghs/UPn6BVA0A7bGe49c7+1FaWDHE=`,
+
+      6: `[Interface]
+Address = 2.22.151.158/32
+DNS = 178.22.122.100
+ListenPort = 51820
+MTU = 1500
+PrivateKey = kMgZEcXHm7t5CVh9zAlkC0YQhdmj3BHyXvqwdjwjq3U=`,
+
+      7: `[Interface]
+Address = 2.22.151.4/32
+DNS = 78.157.42.101
+ListenPort = 51820
+MTU = 1423
+PrivateKey = YGxXENfvlwWI9HgPq0tLfsewzLu9vFOpwPmijOOwVkU=`,
+
+      8: `[Interface]
+Address = 2.22.151.195/32
+DNS = 185.51.200.2
+ListenPort = 51820
+MTU = 1489
+PrivateKey = iFQN7s7gE3/d4XD98oO/SmFBbzfpnRZOZms/jOdoX1g=`,
+
+      9: `[Interface]
+Address = 2.22.151.12/32
+DNS = 10.202.10.11
+ListenPort = 51820
+MTU = 1486
+PrivateKey = cO9W+TFq7m3KxaMiefsfGFCwwHu+JWLgW9tR4UTpy1Q=`
+    };
+
+    const accessCodes = {
+      1: 'napcaM1',
+      2: 'napcaA2',
+      3: 'napcaD3',
+      4: 'napcaC4',
+      5: 'napcaB5',
+      6: 'napcaJ6',
+      7: 'napcaY1',
+      8: 'napcaP2',
+      9: 'napcaN12'
+    };
+
+    // Demo-only. This is visible in the page source and is not secure.
+    const DEMO_ADMIN_CODE = 'mahanmahdi13881365';
+
+    const authForm = document.getElementById('authForm');
+    const authOverlay = document.getElementById('authOverlay');
+    const authError = document.getElementById('authError');
+    const phoneInput = document.getElementById('phoneInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const entrySuccess = document.getElementById('entrySuccess');
+
+    [phoneInput, passwordInput].forEach(input => {
+      input.addEventListener('input', () => {
+        input.value = input.value.replace(/\D/g, '');
+      });
+    });
+
+    authForm.addEventListener('submit', event => {
+      event.preventDefault();
+
+      if (!/^\d{11}$/.test(phoneInput.value)) {
+        authError.textContent = 'Enter a phone number with exactly 11 digits.';
+        phoneInput.focus();
+        return;
+      }
+
+      if (!/^\d{8}$/.test(passwordInput.value)) {
+        authError.textContent = 'Enter a passcode with exactly 8 digits.';
+        passwordInput.focus();
+        return;
+      }
+
+      authError.textContent = '';
+      entrySuccess.classList.add('show');
+
+      setTimeout(() => {
+        entrySuccess.classList.remove('show');
+        authOverlay.classList.add('hidden');
+      }, 1800);
+    });
+
+    const codeModal = document.getElementById('codeModal');
+    const serverCode = document.getElementById('serverCode');
+    const codeError = document.getElementById('codeError');
+    const configModal = document.getElementById('configModal');
+    const configText = document.getElementById('configText');
+    const activeWidget = document.getElementById('activeWidget');
+    const activeConfigName = document.getElementById('activeConfigName');
+    let selectedServer = null;
+
+    document.querySelectorAll('.download-button[data-server]').forEach(button => {button.addEventListener('click', event => {
+        event.preventDefault();
+        selectedServer = button.dataset.server;
+        serverCode.value = '';
+        codeError.textContent = '';
+        codeModal.classList.add('open');
+        serverCode.focus();
+      });
+    });
+
+    function verifyServerCode() {
+      if (serverCode.value !== accessCodes[selectedServer]) {
+        codeError.textContent = 'Incorrect access code. Please try again.';
+        serverCode.focus();
+        return;
+      }
+
+      const button = document.querySelector(
+        `.download-button[data-server="${selectedServer}"]`
+      );
+
+      activeConfigName.textContent =
+        button?.querySelector('.button-title')?.textContent ||
+        'Verified configuration';
+
+      activeWidget.classList.add('visible');
+      codeModal.classList.remove('open');
+      configText.value = configs[selectedServer];
+      configModal.classList.add('open');
+      serverCode.value = '';
+      codeError.textContent = '';
+    }
+
+    document.getElementById('submitCode').addEventListener('click', verifyServerCode);
+
+    serverCode.addEventListener('keydown', event => {
+      if (event.key === 'Enter') verifyServerCode();
+    });
+
+    document.getElementById('closeCodeModal').addEventListener('click', () => {
+      codeModal.classList.remove('open');
+    });
+
+    codeModal.addEventListener('click', event => {
+      if (event.target === codeModal) codeModal.classList.remove('open');
+    });
+
+    document.getElementById('closeConfigModal').addEventListener('click', () => {
+      configModal.classList.remove('open');
+    });
+
+    configModal.addEventListener('click', event => {
+      if (event.target === configModal) configModal.classList.remove('open');
+    });
+
+    document.getElementById('copyConfig').addEventListener('click', async event => {
+      const button = event.currentTarget;
+
+      try {
+        await navigator.clipboard.writeText(configText.value);
+      } catch {
+        configText.select();
+        document.execCommand('copy');
+      }
+
+      button.textContent = 'Copied';
+      setTimeout(() => {
+        button.textContent = 'Copy configuration';
+      }, 1500);
+    });
+
+    // Approximate latency to this website, not VPN latency or internet speed.
+    const pingValue = document.getElementById('pingValue');
+
+    async function measurePing() {
+      const start = performance.now();
+
+      try {
+        await fetch(`${location.origin}/favicon.ico?t=${Date.now()}`, {
+          method: 'HEAD',
+          cache: 'no-store'
+        });
+        pingValue.textContent = `${Math.round(performance.now() - start)} ms`;
+      } catch {
+        pingValue.textContent = 'Unavailable';
+      }
+    }
+
+    measurePing();
+    setInterval(measurePing, 15000);
+
+    // Demo admin panel
+    const adminLoginModal = document.getElementById('adminLoginModal');
+    const adminCodeInput = document.getElementById('adminCodeInput');
+    const adminLoginError = document.getElementById('adminLoginError');
+    const adminPage = document.getElementById('adminPage');
+    const adminGrid = document.getElementById('adminGrid');
+    const adminMessage = document.getElementById('adminMessage');
+    const mainPage = document.getElementById('mainPage');
+
+    function showAdminLogin() {
+      adminCodeInput.value = '';
+      adminLoginError.textContent = '';
+      adminLoginModal.classList.add('open');
+      adminCodeInput.focus();
+    }
+
+    document.getElementById('ownerShortcut').addEventListener('click', showAdminLogin);
+    document.getElementById('openAdminLogin').addEventListener('click', showAdminLogin);
+
+    document.getElementById('closeAdminLogin').addEventListener('click', () => {
+      adminLoginModal.classList.remove('open');
+    });
+
+    function renderAdminFields() {
+      adminGrid.replaceChildren();
+
+      for (const [id, config] of Object.entries(configs)) {
+        const button = document.querySelector(
+          `.download-button[data-server="${id}"]`
+        );
+        const title = button?.querySelector('.button-title')?.textContent || `Config ${id}`;const article = document.createElement('article');
+        article.className = 'admin-config';
+
+        const heading = document.createElement('h3');
+        heading.textContent = title;
+
+        const codeLabel = document.createElement('label');
+        codeLabel.textContent = 'Access code';
+
+        const codeInput = document.createElement('input');
+        codeInput.className = 'admin-access-code';
+        codeInput.dataset.server = id;
+        codeInput.value = accessCodes[id] || '';
+
+        const configLabel = document.createElement('label');
+        configLabel.textContent = 'WireGuard configuration';
+
+        const configInput = document.createElement('textarea');
+        configInput.className = 'admin-config-text';
+        configInput.dataset.server = id;
+        configInput.value = config;
+
+        article.append(heading, codeLabel, codeInput, configLabel, configInput);
+        adminGrid.append(article);
+      }
+    }
+
+    function openAdminPanel() {
+      if (adminCodeInput.value !== DEMO_ADMIN_CODE) {
+        adminLoginError.textContent = 'Incorrect owner code.';
+        return;
+      }
+
+      adminLoginModal.classList.remove('open');
+      authOverlay.classList.add('hidden');
+      mainPage.style.display = 'none';
+      renderAdminFields();
+      adminPage.classList.add('visible');
+    }
+
+    document.getElementById('adminLoginButton')
+      .addEventListener('click', openAdminPanel);
+
+    adminCodeInput.addEventListener('keydown', event => {
+      if (event.key === 'Enter') openAdminPanel();
+    });
+
+    document.getElementById('saveAdmin').addEventListener('click', () => {
+      document.querySelectorAll('.admin-access-code').forEach(input => {
+        accessCodes[input.dataset.server] = input.value.trim();
+      });
+
+      document.querySelectorAll('.admin-config-text').forEach(input => {
+        configs[input.dataset.server] = input.value;
+      });
+
+      adminMessage.textContent =
+        'Changes saved for this page session only. Reloading resets them.';
+      setTimeout(() => { adminMessage.textContent = ''; }, 4000);
+    });
+
+    document.getElementById('backFromAdmin').addEventListener('click', () => {
+      adminPage.classList.remove('visible');
+      mainPage.style.display = '';
+      authOverlay.classList.add('hidden');
+    });
+  </script>
+</body>
+</html>
